@@ -6,76 +6,82 @@
 /*   By: anspirga <anspirga@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/12/13 14:31:59 by anspirga      #+#    #+#                 */
-/*   Updated: 2020/12/13 14:51:15 by anspirga      ########   odam.nl         */
+/*   Updated: 2020/12/15 18:51:25 by anspirga      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <stdarg.h>
 #include <stdio.h>
 
-int     main(int argc, char *argv[])
+//printf returns the number of characters printed
+int		my_printf(const char *str, ...)
 {
-   my_printf(argv[0]);
-   my_printf("\nHello\n");
-   my_printf("Test String %s with integer %i and %% test\n", argv[0], argc);
+	int i;
+	int count;
+	int print_integer;
+	char *integer_string;
+	char *print_string;
+	va_list list;
 
-   return 0;
+	i = 0;
+	count = 0;
+	va_start(list, str);
+	while (str[i] != '\0')
+	{
+		if (str[i] == '%')
+		{
+			i++;
+			if (str[i] == 's')
+			{
+				print_string = va_arg(list, char *);
+				ft_putstr_fd(print_string, 1);
+				i++;
+				count = count + ft_strlen(print_string);
+			}
+			else if (str[i] == 'i')
+			{
+				print_integer = va_arg(list, int);
+				integer_string = ft_itoa(print_integer);
+				ft_putnbr_fd(print_integer, 1);
+				i++;
+				count = count + ft_strlen(integer_string);
+			}
+			else if (str[i] == '%')
+			{
+				ft_putchar_fd('%', 1);
+				i++;
+				count++;
+			}
+			else if (str[i] != '\0')
+			{
+				ft_putchar_fd('%', 1);
+				ft_putchar_fd(str[i], 1);
+				i++;
+				count = count + 2;
+			}
+		}
+		else
+		{
+			ft_putchar_fd(str[i], 1);
+			i++;
+			count++;
+		}
+	}
+	va_end(list);
+	return (count);
 }
 
-
-int  my_printf(char *pszFormatString, ...)
+int		main(int argc, char *argv[])
 {
-   int CharacterCount = 0;
-   int PrintInteger;
-   char IntegerString[10];
-   char *pPrintString;
-   va_list VaList;
+	char str [] = "hello";
+	int num;
 
-   va_start(VaList, pszFormatString);
-   
-   while(*pszFormatString)
-   {
-       if(*pszFormatString == '%')
-       {
-           pszFormatString++;
-           switch(*pszFormatString)
-           {
-              case 's': 
-                      pPrintString = va_arg(VaList, char *);
-                      fputs(pPrintString, stdout);
-                      pszFormatString++;
-                      CharacterCount += strlen(pPrintString);
-                      break;
-              case 'i':  
-                      PrintInteger = va_arg(VaList, int);
-                      _itoa(PrintInteger, IntegerString, 10);
-                      fputs(IntegerString, stdout);
-                      pszFormatString++;
-                      CharacterCount += strlen(IntegerString);
-                      break;
-              case '%': 
-                      putchar('%');
-                      pszFormatString++;
-                      CharacterCount++;
-                      break;
-              case '\0': 
-                      break;
-              default:
-                      putchar('%');
-                      putchar(*pszFormatString);
-                      pszFormatString++;            
-                      CharacterCount +=2;
-           }       
-       }
-       else
-       {
-           putchar(*pszFormatString);
-           pszFormatString++;
-           CharacterCount++;
-       }
-   }
-
-   va_end(VaList);
-
-   return CharacterCount;
+	num = 10;
+	//my_printf("Hello\n");
+	my_printf("String: %s Integer: %i test: %% %", str, num);
+	printf("\nString: %s Integer: %i test: %%\n", str, num);
+	//my_printf(str);
+	//my_printf(argv[0]);
+	return (0);
 }
