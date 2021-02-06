@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_atoi.c                                          :+:    :+:            */
+/*   utilities.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: anspirga <anspirga@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/11/10 15:39:10 by anspirga      #+#    #+#                 */
-/*   Updated: 2020/11/10 19:42:16 by anspirga      ########   odam.nl         */
+/*   Created: 2021/01/15 16:54:08 by anspirga      #+#    #+#                 */
+/*   Updated: 2021/01/30 17:19:18 by anspirga      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
+
+int			ft_strlen(const char *str)
+{
+	int num;
+
+	num = 0;
+	while (str[num] != '\0')
+	{
+		num++;
+	}
+	return (num);
+}
 
 static int	overflow(int neg, int num, const char *str, int i)
 {
@@ -60,4 +72,31 @@ int			ft_atoi(const char *str)
 			return (overflow(neg, num, str, i));
 	}
 	return (num * neg);
+}
+
+/*
+**returns the number of digits of a number num
+**returns 0 if num is 0, WICHTIG!
+*/
+
+int			get_digit_length(int num)
+{
+	int len;
+
+	len = 0;
+	if (num == 0)
+		return (0);
+	if (num == -2147483648)
+		return (11);
+	if (num < 0)
+	{
+		num = num * -1;
+		len++;
+	}
+	while (num > 0)
+	{
+		num = num / 10;
+		len++;
+	}
+	return (len);
 }

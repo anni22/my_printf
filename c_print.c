@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_putnbr_fd.c                                     :+:    :+:            */
+/*   c_print.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: anspirga <anspirga@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/11/06 12:36:35 by anspirga      #+#    #+#                 */
-/*   Updated: 2020/11/06 12:48:24 by anspirga      ########   odam.nl         */
+/*   Created: 2021/01/17 09:57:09 by anspirga      #+#    #+#                 */
+/*   Updated: 2021/01/30 17:09:12 by anspirga      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_putnbr_fd(int n, int fd)
+/*
+**gets the argument for specifier c
+**prints it in the correct format
+*/
+
+void			c_print(va_list args, t_format *format)
 {
-	if (n == -2147483648)
+	char	c;
+	int		i;
+
+	i = format->width - 1;
+	c = va_arg(args, int);
+	if (format->side == 'L')
+		print_char(c, format);
+	while (i > 0)
 	{
-		ft_putchar_fd(('-'), fd);
-		ft_putchar_fd(('2'), fd);
-		ft_putnbr_fd(147483648, fd);
+		print_char(format->padding, format);
+		i--;
 	}
-	else if (n < 0)
-	{
-		ft_putchar_fd(('-'), fd);
-		ft_putnbr_fd(-n, fd);
-	}
-	else if (n > 9)
-	{
-		ft_putnbr_fd((n / 10), fd);
-		ft_putnbr_fd((n % 10), fd);
-	}
-	else
-		ft_putchar_fd((n + '0'), fd);
+	if (format->side == 'R')
+		print_char(c, format);
 }
